@@ -1,0 +1,19 @@
+{
+    "name": "gumbili/jambu",
+    "description": "Just a jambu...",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Gumbili\\Jambu\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gumbili Project",
+            "email": "gumbiliproject@gmail.com"
+        }
+    ],
+    "require": {
+        "league/plates": "^3.4"
+    }
+}

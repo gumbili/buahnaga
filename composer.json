@@ -3,6 +3,9 @@
     "description": "Just a jambu...",
     "type": "project",
     "autoload": {
+        "files": [
+            "system/Config/constants.php"
+        ],
         "psr-4": {
             "Gumbili\\Jambu\\": "./"
         }

@@ -2,19 +2,32 @@
 
 namespace Gumbili\Jambu\System\Router;
 
+use Gumbili\Jambu\System\Exception\Http\PageNotFoundException;
+use Gumbili\Jambu\System\Http\Request\Request;
+
 class Router
 {
     private static array $routes = [];
 
-    public static function get(string $path, string $controller, string $method = null, array $middelwares = []): void
+    public static function add(string $requestMethod, string $path, string $controller, string $method = null, array $middelwares = []): void
     {
         self::$routes[] = [
-            'request_method' => 'GET',
+            'request_method' => strtoupper($requestMethod),
             'path' => $path,
             'controller' => $controller,
             'method' => $method,
             'middlewares' => $middelwares
         ];
+    }
+
+    public static function get(string $path, string $controller, string $method = null, array $middelwares = [])
+    {
+        self::add('GET', $path, $controller, $method, $middelwares);
+    }
+
+    public static function post(string $path, string $controller, string $method = null, array $middelwares = []): void
+    {
+        self::add('POST', $path, $controller, $method, $middelwares);
     }
 
     public static function run(): void
@@ -27,11 +40,6 @@ class Router
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
         foreach (self::$routes as $route) {
-
-            if ($requestMethod !== $route['request_method']) {
-                http_response_code(404);
-                echo 'Page Not Found';
-            }
 
             $routePath = $route['path'];
             $pathInfo = $path;
@@ -50,25 +58,33 @@ class Router
 
             $pattern = "#^" . $routePath . "$#";
 
-            if (preg_match($pattern, $pathInfo, $variables)) {
+            if (preg_match($pattern, $pathInfo, $matches) && $requestMethod == $route['request_method']) {
+
                 foreach ($route['middlewares'] as $middleware) {
                     $instance = new $middleware;
                     $instance->before();
                 }
+
                 $method = $route['method'];
+
                 $controller = new $route['controller'];
-                array_shift($variables);
-                $result = call_user_func_array([$controller, $method], $variables);
+
+                array_shift($matches);
+
+                $request = new Request($_SERVER, $_REQUEST, $_GET, $_POST, $_COOKIE);
+
+                $result = call_user_func_array([$controller, $method], [$request]);
 
                 if (is_null($result)) {
                     return;
                 }
-                echo $result;
+                if (!is_object($result) && !is_array($result)) {
+                    echo $result;
+                }
                 return;
             }
         }
 
-        http_response_code(404);
-        echo 'Page Not Found';
+        throw new PageNotFoundException();
     }
 }

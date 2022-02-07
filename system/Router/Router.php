@@ -1,33 +1,38 @@
 <?php
 
-namespace Gumbili\Jambu\System\Router;
+namespace Gumbili\BuahNaga\System\Router;
 
-use Gumbili\Jambu\System\Exception\Http\PageNotFoundException;
-use Gumbili\Jambu\System\Http\Request\Request;
+use Gumbili\BuahNaga\System\Exception\Http\PageNotFoundException;
+use Gumbili\BuahNaga\System\Http\Request\Request;
 
 class Router
 {
     private static array $routes = [];
 
-    public static function add(string $requestMethod, string $path, string $controller, string $method = null, array $middelwares = []): void
+    public static function add(string $requestMethod, string $path, string $controller, string $method = null, array $options = []): void
     {
         self::$routes[] = [
             'request_method' => strtoupper($requestMethod),
             'path' => $path,
             'controller' => $controller,
             'method' => $method,
-            'middlewares' => $middelwares
+            'options' => $options
         ];
     }
 
-    public static function get(string $path, string $controller, string $method = null, array $middelwares = [])
+    public static function get(string $path, string $controller, string $method = null, array $options = []): void
     {
-        self::add('GET', $path, $controller, $method, $middelwares);
+        self::add('GET', $path, $controller, $method, $options);
     }
 
-    public static function post(string $path, string $controller, string $method = null, array $middelwares = []): void
+    public static function post(string $path, string $controller, string $method = null, array $options = []): void
     {
-        self::add('POST', $path, $controller, $method, $middelwares);
+        self::add('POST', $path, $controller, $method, $options);
+    }
+
+    public static function list()
+    {
+        return self::$routes;
     }
 
     public static function run(): void
@@ -60,9 +65,11 @@ class Router
 
             if (preg_match($pattern, $pathInfo, $matches) && $requestMethod == $route['request_method']) {
 
-                foreach ($route['middlewares'] as $middleware) {
-                    $instance = new $middleware;
-                    $instance->before();
+                if (isset($route['options']['middlewares'])) {
+                    foreach ($route['options']['middlewares'] as $middleware) {
+                        $instance = new $middleware;
+                        $instance->before();
+                    }
                 }
 
                 $method = $route['method'];

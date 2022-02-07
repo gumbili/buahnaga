@@ -1,6 +1,6 @@
 <?php
 
-namespace Gumbili\Jambu\System\Exception;
+namespace Gumbili\BuahNaga\System\Exception;
 
 use \Throwable;
 use \Exception as PHPException;

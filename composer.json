@@ -1,13 +1,14 @@
 {
-    "name": "gumbili/jambu",
-    "description": "Just a jambu...",
+    "name": "gumbili/buahnaga",
+    "description": "Just a buah naga framework...",
     "type": "project",
     "autoload": {
         "files": [
-            "system/Config/constants.php"
+            "system/Config/constants.php",
+            "system/Commons.php"
         ],
         "psr-4": {
-            "Gumbili\\Jambu\\": "./"
+            "Gumbili\\BuahNaga\\": "./"
         }
     },
     "authors": [

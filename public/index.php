@@ -2,8 +2,8 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Gumbili\Jambu\System\Jambu;
+use Gumbili\BuahNaga\System\BuahNaga;
 
-$jambu = new Jambu();
+$buahNaga = new BuahNaga();
 
-$jambu->start();
+$buahNaga->start();

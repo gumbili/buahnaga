@@ -1,6 +1,6 @@
 <?php
 
-namespace Gumbili\Jambu\System\Http\Response;
+namespace Gumbili\BuahNaga\System\Http\Response;
 
 class Redirect
 {
@@ -8,5 +8,10 @@ class Redirect
     {
         header('Location: ' . $route);
         exit;
+    }
+
+    public static function route($name)
+    {
+        self::to(route($name));
     }
 }

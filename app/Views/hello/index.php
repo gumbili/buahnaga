@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <div class="p-5 rounded-lg shadow-lg mt-3 bg-light">
             <h1 class="text-center">Hello, world!</h1>
-            <form action="/simpan" method="post">
+            <form action="<?= route('hello.simpan') ?>" method="post">
                 <div class="mb-3">
                     <input type="text" name="nama" class="form-control">
                 </div>

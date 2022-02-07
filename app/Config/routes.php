@@ -1,6 +1,10 @@
 <?php
 
-use Gumbili\Jambu\System\Router\Router;
-use Gumbili\Jambu\App\Controllers\Hello;
+namespace Gumbili\BuahNaga\App\Config;
 
-Router::add('GET', '/', Hello::class, 'index');
+use Gumbili\BuahNaga\System\Router\Router;
+use Gumbili\BuahNaga\App\Controllers\Hello;
+
+Router::get('/', Hello::class, 'index', ['name' => 'hello.index']);
+Router::post('/simpan', Hello::class, 'simpan', ['name' => 'hello.simpan']);
+Router::get('/pindah', Hello::class, 'pindah', ['name' => 'hello.pindah']);

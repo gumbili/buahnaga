@@ -1,6 +1,6 @@
 <?php
 
-namespace Gumbili\Jambu\System\Supports\Session;
+namespace Gumbili\BuahNaga\System\Supports\Session;
 
 class Session
 {

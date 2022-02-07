@@ -1,6 +1,6 @@
 <?php
 
-namespace Gumbili\Jambu\System\Http\Request;
+namespace Gumbili\BuahNaga\System\Http\Request;
 
 class Request
 {

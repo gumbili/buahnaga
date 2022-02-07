@@ -1,9 +1,9 @@
 <?php
 
-namespace Gumbili\Jambu\System\Exception\Http;
+namespace Gumbili\BuahNaga\System\Exception\Http;
 
-use Gumbili\Jambu\System\Exception\Exception;
-use Gumbili\Jambu\System\View\View;
+use Gumbili\BuahNaga\System\Exception\Exception;
+use Gumbili\BuahNaga\System\View\View;
 
 class PageNotFoundException extends Exception
 {

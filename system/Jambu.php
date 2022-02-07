@@ -8,7 +8,7 @@ class Jambu
 {
     public function start()
     {
-        require_once __DIR__ . '/../App/Config/routes.php';
+        require_once __DIR__ . '/../app/Config/routes.php';
 
         Router::run();
     }

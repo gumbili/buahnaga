@@ -6,5 +6,5 @@ use Gumbili\BuahNaga\System\Router\Router;
 use Gumbili\BuahNaga\App\Controllers\Hello;
 
 Router::get('/', Hello::class, 'index', ['name' => 'hello.index']);
-Router::post('/simpan', Hello::class, 'simpan', ['name' => 'hello.simpan']);
-Router::get('/pindah', Hello::class, 'pindah', ['name' => 'hello.pindah']);
+Router::get('/about', Hello::class, 'about', ['name' => 'hello.about']);
+Router::get('/:username', Hello::class, 'placeholder', ['name' => 'hello.placeholder']);

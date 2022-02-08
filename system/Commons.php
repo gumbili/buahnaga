@@ -4,18 +4,19 @@ namespace Gumbili\BuahNaga\System;
 
 use Gumbili\BuahNaga\System\Router\Router;
 
-if (!function_exists('route')) {
-    function route(string $name, array $params = [])
-    {
-        $routeList = Router::list();
+function route(string $name, array $params = [])
+{
+    return Router::route($name, $params);
+}
 
-        foreach ($routeList as $route) {
-            if (isset($route['options']['name'])) {
-                if ($route['options']['name'] === $name) {
-                    return $route['path'];
-                }
-            }
-        }
-        return;
+function is_associative(array $array)
+{
+    if ([] === $array) {
+        return true;
     }
+
+    if (array_keys($array) !== range(0, count($array) - 1)) {
+        return true;
+    }
+    return false;
 }

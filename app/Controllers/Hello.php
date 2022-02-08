@@ -2,24 +2,27 @@
 
 namespace Gumbili\BuahNaga\App\Controllers;
 
+use Gumbili\BuahNaga\System\Exception\GeneralException;
 use Gumbili\BuahNaga\System\Http\Request\Request;
 use Gumbili\BuahNaga\System\Http\Response\Redirect;
 use Gumbili\BuahNaga\System\View\View;
+
+use function Gumbili\BuahNaga\System\route;
 
 class Hello
 {
     public function index()
     {
-        return View::render('hello/index');
+        var_dump(route('hello.placeholdera', ['nama' => 'mawar']));
     }
 
-    public function simpan(Request $request)
+    public function placeholder(Request $request)
     {
-        var_dump($request->post());
+        var_dump($request->params());
     }
 
-    public function pindah()
+    public function about()
     {
-        return Redirect::route('hello.simpan');
+        return 'Halaman about';
     }
 }

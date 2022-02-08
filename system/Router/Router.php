@@ -2,22 +2,18 @@
 
 namespace Gumbili\BuahNaga\System\Router;
 
-use Gumbili\BuahNaga\System\Exception\Http\PageNotFoundException;
-use Gumbili\BuahNaga\System\Http\Request\Request;
+use Gumbili\BuahNaga\System\Exception\GeneralException;
+use Gumbili\BuahNaga\System\Router\RouteCollection;
+
+use function Gumbili\BuahNaga\System\is_associative;
 
 class Router
 {
-    private static array $routes = [];
 
     public static function add(string $requestMethod, string $path, string $controller, string $method = null, array $options = []): void
     {
-        self::$routes[] = [
-            'request_method' => strtoupper($requestMethod),
-            'path' => $path,
-            'controller' => $controller,
-            'method' => $method,
-            'options' => $options
-        ];
+        $routerCollection = RouteCollection::getInstance();
+        $routerCollection->add($requestMethod, $path, $controller, $method, $options);
     }
 
     public static function get(string $path, string $controller, string $method = null, array $options = []): void
@@ -30,68 +26,46 @@ class Router
         self::add('POST', $path, $controller, $method, $options);
     }
 
-    public static function list()
+    public static function list(): array
     {
-        return self::$routes;
+        return RouteCollection::getInstance()->list();
     }
 
     public static function run(): void
     {
-        $path = '/';
-        if (isset($_SERVER['PATH_INFO'])) {
-            $path = $_SERVER['PATH_INFO'];
-        }
+        RouteCollection::getInstance()->run();
+    }
 
-        $requestMethod = $_SERVER['REQUEST_METHOD'];
-
-        foreach (self::$routes as $route) {
-
-            $routePath = $route['path'];
-            $pathInfo = $path;
-
-            if ($routePath[0] !== '/') {
-                $routePath = '/' . $routePath;
-            }
-
-            if ($routePath[strlen($routePath) - 1] !== '/') {
-                $routePath .= '/';
-            }
-
-            if ($pathInfo[strlen($pathInfo) - 1] !== '/') {
-                $pathInfo .= '/';
-            }
-
-            $pattern = "#^" . $routePath . "$#";
-
-            if (preg_match($pattern, $pathInfo, $matches) && $requestMethod == $route['request_method']) {
-
-                if (isset($route['options']['middlewares'])) {
-                    foreach ($route['options']['middlewares'] as $middleware) {
-                        $instance = new $middleware;
-                        $instance->before();
+    public static function route(string $routeName, array $params = [])
+    {
+        foreach (self::list() as $route) {
+            if (isset($route['options']['name'])) {
+                if ($route['options']['name'] === $routeName) {
+                    $placeholders = RouteCollection::getInstance()->extractPlaceholders($route['path']);
+                    if (count($placeholders) > 0) {
+                        if (count($params) !== count($placeholders)) {
+                            throw new GeneralException('Routes need parameters');
+                        }
+                        $routePathExplode = explode('/', $route['path']);
+                        foreach ($placeholders as $position => $placeholder) {
+                            $originalPlaceholder = ':' . $placeholder;
+                            $placeholderPosition = array_search($originalPlaceholder, $routePathExplode);
+                            if (is_associative($params)) {
+                                if (array_key_exists($placeholder, $params) === false) {
+                                    throw new GeneralException("Routes need parameters: " . $placeholder);
+                                }
+                                $routePathExplode[$placeholderPosition] = $params[$placeholder];
+                            } else {
+                                $routePathExplode[$placeholderPosition] = $params[$position];
+                            }
+                        }
+                        $routePath = implode('/', $routePathExplode);
+                        return $routePath;
                     }
+                    return $route['path'];
                 }
-
-                $method = $route['method'];
-
-                $controller = new $route['controller'];
-
-                array_shift($matches);
-
-                $request = new Request($_SERVER, $_REQUEST, $_GET, $_POST, $_COOKIE);
-
-                $result = call_user_func_array([$controller, $method], [$request]);
-
-                if (is_null($result)) {
-                    return;
-                }
-                if (!is_object($result) && !is_array($result)) {
-                    echo $result;
-                }
-                return;
             }
         }
-
-        throw new PageNotFoundException();
+        throw new GeneralException('Route with name [' . $routeName . '] not found.');
     }
 }

@@ -11,8 +11,8 @@
 <body>
     <div class="container-fluid">
         <div class="p-5 rounded-lg shadow-lg mt-3 bg-light">
-            <h1 class="text-center">Hello, world!</h1>
-            <form action="<?= route('hello.index') ?>" method="post">
+            <h1 class="text-center">Hello, <?= $nama ?>!</h1>
+            <form action="<?= route('hello.submit') ?>" method="post">
                 <div class="mb-3">
                     <input type="text" name="nama" class="form-control">
                 </div>

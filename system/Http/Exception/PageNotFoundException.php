@@ -1,6 +1,6 @@
 <?php
 
-namespace Gumbili\BuahNaga\System\Exception\Http;
+namespace Gumbili\BuahNaga\System\Http\Exception;
 
 use Gumbili\BuahNaga\System\Exception\Exception;
 use Gumbili\BuahNaga\System\View\View;

@@ -2,20 +2,14 @@
 
 namespace Gumbili\BuahNaga\System\View;
 
-use League\Plates\Engine as PlatesEngine;
-
-use function Gumbili\BuahNaga\System\route;
+use Gumbili\Rangkai\Rangkai;
 
 class View
 {
     public static function render(string $view, $data = [])
     {
-        $platesEngine = new PlatesEngine(VIEWS_PATH);
-
-        $platesEngine->registerFunction('route', function (string $name, array $params = []) {
-            return route($name, $params);
-        });
-
-        return $platesEngine->render($view, $data);
+        $rangkai = new Rangkai(VIEWS_PATH);
+        $rangkai->setData($data);
+        return $rangkai->render($view);
     }
 }

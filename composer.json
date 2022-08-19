@@ -17,7 +17,8 @@
             "email": "gumbiliproject@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
-        "league/plates": "^3.4"
+        "gumbili/rangkai": "dev-main"
     }
 }

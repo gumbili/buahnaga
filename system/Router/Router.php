@@ -2,10 +2,8 @@
 
 namespace Gumbili\BuahNaga\System\Router;
 
-use Gumbili\BuahNaga\System\Exception\GeneralException;
+use Gumbili\BuahNaga\System\Router\Exception\RouteException;
 use Gumbili\BuahNaga\System\Router\RouteCollection;
-
-use function Gumbili\BuahNaga\System\is_associative;
 
 class Router
 {
@@ -44,7 +42,7 @@ class Router
                     $placeholders = RouteCollection::getInstance()->extractPlaceholders($route['path']);
                     if (count($placeholders) > 0) {
                         if (count($params) !== count($placeholders)) {
-                            throw new GeneralException('Routes need parameters');
+                            throw RouteException::forIvalidRouteParameter('Route need parameter');
                         }
                         $routePathExplode = explode('/', $route['path']);
                         foreach ($placeholders as $position => $placeholder) {
@@ -52,7 +50,7 @@ class Router
                             $placeholderPosition = array_search($originalPlaceholder, $routePathExplode);
                             if (is_associative($params)) {
                                 if (array_key_exists($placeholder, $params) === false) {
-                                    throw new GeneralException("Routes need parameters: " . $placeholder);
+                                    throw RouteException::forIvalidRouteParameter('Routes need parameter: ' . $placeholder);
                                 }
                                 $routePathExplode[$placeholderPosition] = $params[$placeholder];
                             } else {
@@ -66,6 +64,6 @@ class Router
                 }
             }
         }
-        throw new GeneralException('Route with name [' . $routeName . '] not found.');
+        throw RouteException::forRouteNotFound('Route with name [' . $routeName . '] not found.');
     }
 }

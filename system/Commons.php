@@ -1,7 +1,5 @@
 <?php
 
-namespace Gumbili\BuahNaga\System;
-
 use Gumbili\BuahNaga\System\Router\Router;
 
 function route(string $name, array $params = [])

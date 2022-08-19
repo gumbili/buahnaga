@@ -2,7 +2,8 @@
 
 namespace Gumbili\BuahNaga\System\Router;
 
-use Gumbili\BuahNaga\System\Exception\Http\PageNotFoundException;
+use Gumbili\BuahNaga\System\Http\Exception\ControllerException;
+use Gumbili\BuahNaga\System\Http\Exception\PageNotFoundException;
 use Gumbili\BuahNaga\System\Http\Request\Request;
 
 class RouteCollection
@@ -75,6 +76,10 @@ class RouteCollection
 
                         $controller = new $route['controller'];
 
+                        if (!method_exists($controller, $method)) {
+                            throw ControllerException::forMethodNotFound();
+                        }
+
                         array_shift($matches);
 
                         $request = new Request($_SERVER, $_REQUEST, $_GET, $_POST, $_COOKIE, (object)$params);
@@ -145,12 +150,16 @@ class RouteCollection
     private function sanitizePath($path)
     {
         if ($path[0] !== '/') {
-            $path = '/' . $path;
+            // $path = '/' . $path;
         }
 
         if ($path[strlen($path) - 1] !== '/') {
-            $path .= '/';
+            // $path .= '/';
         }
+
+        $path = ltrim($path, '/');
+
+        if($path === '') $path = '/';
 
         return $path;
     }

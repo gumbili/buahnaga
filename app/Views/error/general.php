@@ -12,11 +12,7 @@
 <body>
     <div class="py-3 container-fluid">
         <div class="alert alert-warning">
-            <h6>Code: <?= $code ?></h6>
-            <h6>Error: <?= $message ?></h6>
-            <h6>File: <?= $file ?></h6>
-            <h6>Line: <?= $line ?></h6>
-            <h6>Trace</h6>
+            <h4 class="mb-3">Error: <?= $message ?></h4>
             <div class="rounded border border-secondary p-3">
                 <?= $trace ?>
             </div>

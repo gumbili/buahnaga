@@ -7,4 +7,11 @@ use Gumbili\BuahNaga\App\Controllers\Hello;
 
 Router::get('/', Hello::class, 'index', ['name' => 'hello.index']);
 Router::get('/about', Hello::class, 'about', ['name' => 'hello.about']);
-Router::get('/:username', Hello::class, 'placeholder', ['name' => 'hello.placeholder']);
+Router::get('/users/:username', Hello::class, 'user', ['name' => 'hello.user']);
+Router::get(
+    '/users/:username/certificates/:certificateId', 
+    Hello::class, 
+    'certificateDetail', 
+    ['name' => 'hello.certificateDetail'
+]);
+Router::post('/submit', Hello::class, 'submit', ['name' =>'hello.submit']);

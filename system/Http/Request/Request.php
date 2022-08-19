@@ -63,12 +63,12 @@ class Request
     public function params(string $key = null)
     {
         if ($key) {
-            if (isset($this->params[$key])) {
-                return $this->params[$key];
+            if (isset($this->params->$key)) {
+                return $this->params->$key;
             }
             return null;
         }
 
-        return (object) $this->params;
+        return $this->params;
     }
 }
